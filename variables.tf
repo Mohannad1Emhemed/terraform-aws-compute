@@ -1,6 +1,8 @@
 # --- compute/variables.tf ---
 
-variable "aws_region" {}
+variable "aws_region" {
+  default = "us-east-1"
+}
 variable "instance_count" {
   default = 1
 }
@@ -14,5 +16,5 @@ variable "vol_size" {
 }
 variable "public_key_material" {}
 variable "key_name" {
-  default = "mtckey"
+  default = "devkey"
 }

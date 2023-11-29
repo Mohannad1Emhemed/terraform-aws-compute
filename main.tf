@@ -5,11 +5,11 @@ data "aws_ami" "server_ami" {
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+    values = ["	ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
   }
 }
 
-resource "random_id" "mtc_node_id" {
+resource "random_id" "dev_node_id" {
   byte_length = 2
   count       = var.instance_count
   keepers = {
@@ -17,21 +17,21 @@ resource "random_id" "mtc_node_id" {
   }
 }
 
-resource "aws_key_pair" "mtc_auth" {
+resource "aws_key_pair" "dev_auth" {
   key_name   = var.key_name
   public_key = var.public_key_material
 }
 
-resource "aws_instance" "mtc_node" {
+resource "aws_instance" "dev_node" {
   count         = var.instance_count
   instance_type = var.instance_type
   ami           = data.aws_ami.server_ami.id
 
   tags = {
-    Name = "mtc_node-${random_id.mtc_node_id[count.index].dec}"
+    Name = "dev_node-${random_id.dev_node_id[count.index].dec}"
   }
 
-  key_name               = aws_key_pair.mtc_auth.id
+  key_name               = aws_key_pair.dev_auth.id
   vpc_security_group_ids = [var.public_sg]
   subnet_id              = var.public_subnets[count.index]
 
